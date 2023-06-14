@@ -2,7 +2,11 @@
  Una aplicación de escritorio de texto generativo para estudiantes
 
  Video:
-https://github.com/ivan600/Gpt-Student/assets/57300867/5ffe11d2-98e3-409a-927e-145c40e070a3
+
+
+
+
+https://github.com/ivan600/Gpt-Student/assets/57300867/cd81b0bf-57e3-4e8e-86da-ed3d5f403ece
 
 
 
