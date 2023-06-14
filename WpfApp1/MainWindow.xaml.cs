@@ -26,7 +26,7 @@ public partial class MainWindow : Window
         OpenAIAPI api;
 
 
-public MainWindow()
+        public MainWindow()
 {
 InitializeComponent();
 this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
@@ -45,7 +45,7 @@ GenerarRespuesta();
 else if (e.Key == Key.Escape) { Close(); }
 }
 
-Conversation chat;
+        Conversation chat;
 string role;
 private void GenerarRespuesta()
 {
@@ -67,7 +67,7 @@ private void GenerarRespuesta()
             }
             catch(Exception ex) { 
             
-                MessageBox.Show($"Se ha producido un error: {ex.Message}");
+                MessageBox.Show($"Se ha producido un error: {ex.Message}","Error");
             }
 
 }
@@ -76,22 +76,22 @@ Thickness margin_TxtBlk = new Thickness(40, 5, 40, 5);
 double fontSize = 15;
 private async void AgregarRespuesta()
 {
-string respuesta = string.Empty;
-response = string.Empty;
+            string respuesta = string.Empty;
+            response = string.Empty;
+            
+            string colorHexadecimal = "#a25523";
+            
+            BrushConverter brushConverter = new BrushConverter();
+            Brush colorBrush = (Brush)brushConverter.ConvertFromString(colorHexadecimal);
+            TextBlock textBlock = new TextBlock();
+            textBlock.FontSize = fontSize;
+            textBlock.TextWrapping = TextWrapping.Wrap;
+            textBlock.Margin = margin_TxtBlk;
+            textBlock.Foreground = colorBrush;
+            StackPanel.Children.Add(textBlock);
+            textBlock.Text = "Gpt: ";
 
-string colorHexadecimal = "#a25523";
-
-BrushConverter brushConverter = new BrushConverter();
-Brush colorBrush = (Brush)brushConverter.ConvertFromString(colorHexadecimal);
-TextBlock textBlock = new TextBlock();
-textBlock.FontSize = fontSize;
-textBlock.TextWrapping = TextWrapping.Wrap;
-textBlock.Margin = margin_TxtBlk;
-textBlock.Foreground = colorBrush;
-StackPanel.Children.Add(textBlock);
-textBlock.Text = "Gpt: ";
-
-            try
+            if(await api.Auth.ValidateAPIKey())
             {
                 await chat.StreamResponseFromChatbotAsync(res =>
                 {
@@ -101,14 +101,14 @@ textBlock.Text = "Gpt: ";
                 });
                 role = response;
                 chat.AppendSystemMessage(role);
-
             }
-            catch (Exception ex)
+            else
             {
-                MessageBox.Show($"Se ha producido un error: {ex.Message}");
+                MessageBox.Show("La ApiKey no es valida", "Error Api");
             }
+            
 
-}
+        }
 
     private void AgregarPrompt(string _prompt)
     {
@@ -138,8 +138,11 @@ textBlock.Text = "Gpt: ";
 
         private void TextBox_MouseLeave(object sender, MouseEventArgs e)
         {
-            api = new OpenAIAPI(ApiTextBox.Text);
-            chat = api.Chat.CreateConversation();
+            if(ApiTextBox.Text != null)
+            {
+                api = new OpenAIAPI(ApiTextBox.Text);
+                chat = api.Chat.CreateConversation();
+            }
         }
     }
     }
