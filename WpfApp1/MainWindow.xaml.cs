@@ -23,7 +23,7 @@ namespace WpfApp1
 /// </summary>
 public partial class MainWindow : Window
 {
-        OpenAIAPI api = new OpenAIAPI("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");
+        OpenAIAPI api = new OpenAIAPI("YOUR_APIKEY");
 
 
         public MainWindow()
