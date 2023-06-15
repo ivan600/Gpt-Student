@@ -8,7 +8,11 @@
 
 
 
-https://github.com/ivan600/Gpt-Student/assets/57300867/cd81b0bf-57e3-4e8e-86da-ed3d5f403ece
+
+
+
+
+https://github.com/ivan600/Gpt-Student/assets/57300867/964fc0d8-a12b-41bc-92c3-82c571d9a274
 
 
 
