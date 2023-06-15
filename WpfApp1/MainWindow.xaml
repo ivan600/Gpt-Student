@@ -208,136 +208,155 @@
         BorderThickness="2"
         CornerRadius="10">
         <Grid Name="Grid1">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="200" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="60" />
-                <RowDefinition />
-            </Grid.RowDefinitions>
-            <TextBlock
-                Grid.Row="0"
-                Grid.Column="0"
-                Margin="20,0,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Center"
-                FontSize="25"
-                FontWeight="Bold"
-                Foreground="Chocolate">
-                Gpt Student
-            </TextBlock>
-            <StackPanel Grid.Row="1" VerticalAlignment="Top">
-                <RadioButton
-                    Height="50"
-                    Content="Home"
-                    FontSize="14"
-                    FontWeight="ExtraBold"
-                    Foreground="#a25523"
-                    Style="{StaticResource BotonesMenu}" />
-                <RadioButton
-                    Height="50"
-                    Content="Chat 1"
-                    FontSize="14"
-                    FontWeight="ExtraBold"
-                    Foreground="#a25523"
-                    IsChecked="True"
-                    Style="{StaticResource BotonesMenu}" />
-                <RadioButton
-                    Height="50"
-                    Content="Chat 2"
-                    FontSize="14"
-                    FontWeight="ExtraBold"
-                    Foreground="#a25523"
-                    Style="{StaticResource BotonesMenu}" />
-
-            </StackPanel>
-
-            <StackPanel
-                Grid.Row="1"
-                VerticalAlignment="Bottom"
-                Opacity="1"
-                Margin="0,0,0,6">
+            <Grid Name="Grid_Pantalla1" Visibility="Hidden">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition />
+                </Grid.RowDefinitions>
                 <TextBlock
-                    Margin="0,0,0,2"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Bottom"
-                    Foreground="Chocolate"
-                    Text="ApyKey" />
-
-                <TextBox
-                    Name="ApiTextBox"
-                    Width="Auto"
-                    Height="30"
-                    Margin="10,10,10,13"
-                    VerticalAlignment="Bottom"
-                    MouseLeave="TextBox_MouseLeave"
-                    Style="{DynamicResource ModernTextBox1}" />
-            </StackPanel>
-
-
-            <Border
-                Grid.Column="1"
-                Background="Transparent"
-                MouseLeftButtonDown="ColumnDefinition_MouseLeftButtonDown">
-                <TextBlock
-                    HorizontalAlignment="Center"
+                    Grid.Row="0"
+                    Grid.Column="0"
+                    Margin="20,0,0,0"
+                    HorizontalAlignment="Left"
                     VerticalAlignment="Center"
-                    FontSize="20"
-                    FontWeight="Heavy"
+                    FontSize="25"
+                    FontWeight="Bold"
                     Foreground="Chocolate">
-                    Chat
+                    Gpt Student
                 </TextBlock>
-            </Border>
+                <StackPanel Grid.Row="1" VerticalAlignment="Top">
+                    <RadioButton
+                        Height="50"
+                        Content="Home"
+                        FontSize="14"
+                        FontWeight="ExtraBold"
+                        Foreground="#a25523"
+                        Style="{StaticResource BotonesMenu}" />
+                    <RadioButton
+                        Height="50"
+                        Content="Chat 1"
+                        FontSize="14"
+                        FontWeight="ExtraBold"
+                        Foreground="#a25523"
+                        IsChecked="True"
+                        Style="{StaticResource BotonesMenu}" />
+                    <RadioButton
+                        Height="50"
+                        Content="Chat 2"
+                        FontSize="14"
+                        FontWeight="ExtraBold"
+                        Foreground="#a25523"
+                        Style="{StaticResource BotonesMenu}" />
 
-            <Button
-                Grid.Column="1"
-                Margin="0,10,10,10"
-                VerticalAlignment="Top"
-                Click="Button_Click"
-                Style="{DynamicResource btnCloseStyle}">
-                <Image
-                    Width="Auto"
-                    Height="Auto"
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    Source="C:\Users\ivan\Downloads\crossregular_106296.png" />
-            </Button>
-            <Grid
-                Name="Pantalla1"
-                Grid.Row="1"
-                Grid.Column="1">
-                <ScrollViewer
-                    Name="Scroll"
+                </StackPanel>
+
+                <StackPanel
                     Grid.Row="1"
-                    Grid.Column="1"
-                    Margin="0,0,0,70"
-                    VerticalScrollBarVisibility="Hidden">
-                    <StackPanel Name="StackPanel" />
-
-                </ScrollViewer>
-                <TextBox
-                    x:Name="Prompt"
+                    Margin="0,0,0,6"
                     VerticalAlignment="Bottom"
-                    Style="{DynamicResource ModernTextBox}" />
+                    Opacity="1">
+                    <TextBlock
+                        Margin="0,0,0,2"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Bottom"
+                        Foreground="Chocolate"
+                        Text="ApyKey" />
+
+                    <TextBox
+                        Name="ApiTextBox"
+                        Width="Auto"
+                        Height="30"
+                        Margin="10,10,10,13"
+                        VerticalAlignment="Bottom"
+                        MouseLeave="TextBox_MouseLeave"
+                        Style="{DynamicResource ModernTextBox1}" />
+                </StackPanel>
+
+
+                <Border
+                    Grid.Column="1"
+                    Background="Transparent"
+                    MouseLeftButtonDown="ColumnDefinition_MouseLeftButtonDown">
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="20"
+                        FontWeight="Heavy"
+                        Foreground="Chocolate">
+                        Chat
+                    </TextBlock>
+                </Border>
+
                 <Button
-                    Grid.Row="1"
                     Grid.Column="1"
-                    Margin="0,0,10,22"
-                    VerticalAlignment="Bottom"
-                    Click="Button_Click_1"
-                    Style="{DynamicResource btnSendStyle}">
+                    Margin="0,10,10,10"
+                    VerticalAlignment="Top"
+                    Click="Button_Click"
+                    Style="{DynamicResource btnCloseStyle}">
                     <Image
-                        Opacity="0.5"
-                        OpacityMask="Black"
-                        Source="C:\Users\ivan\Pictures\Iconos\Ui\enviar.png"
-                        Stretch="Fill" />
-
+                        Width="Auto"
+                        Height="Auto"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Source="C:\Users\ivan\Downloads\crossregular_106296.png" />
                 </Button>
+                <Grid
+                    Name="Pantalla1"
+                    Grid.Row="1"
+                    Grid.Column="1">
+                    <ScrollViewer
+                        Name="Scroll"
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="0,0,0,70"
+                        VerticalScrollBarVisibility="Hidden">
+                        <StackPanel Name="StackPanel" />
+
+                    </ScrollViewer>
+                    <TextBox
+                        x:Name="Prompt"
+                        VerticalAlignment="Bottom"
+                        Style="{DynamicResource ModernTextBox}" />
+                    <Button
+                        Grid.Row="1"
+                        Grid.Column="1"
+                        Margin="0,0,10,22"
+                        VerticalAlignment="Bottom"
+                        Click="Button_Click_1"
+                        Style="{DynamicResource btnSendStyle}">
+                        <Image
+                            Opacity="0.5"
+                            OpacityMask="Black"
+                            Source="C:\Users\ivan\Pictures\Iconos\Ui\enviar.png"
+                            Stretch="Fill" />
+
+                    </Button>
+                </Grid>
             </Grid>
+            <Grid Name="Grid_PantallaLoading">
+                <StackPanel VerticalAlignment="Center">
+                    <Image
+                        Name="Image_Loading"
+                        Width="100"
+                        Height="100"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Source="\Images\Gpt-Student-Logo.ico" />
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        FontSize="20"
+                        Foreground="#999387"
+                        Text="Cargando..." />
+                </StackPanel>
 
-
+            </Grid>
         </Grid>
+
     </Border>
 
 

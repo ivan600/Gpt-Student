@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,12 +10,15 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Windows.Media.Animation;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Moderation;
+using System.Threading;
+
 
 namespace WpfApp1
 {
@@ -27,13 +31,12 @@ public partial class MainWindow : Window
 
 
         public MainWindow()
-{
-InitializeComponent();
-this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
-Grid1.PreviewKeyUp += TxtMensaje_KeyDown;
-
-
-}
+        {
+            InitializeComponent();
+            this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
+            Grid1.PreviewKeyUp += TxtMensaje_KeyDown;
+            Loading();
+        }
 
 string response;
 private void TxtMensaje_KeyDown(object sender, KeyEventArgs e)
@@ -144,5 +147,36 @@ private async void AgregarRespuesta()
                 chat = api.Chat.CreateConversation();
             }
         }
+
+        public async Task Loading()
+        {
+            RotateTransform rotateTransform = new RotateTransform();
+            rotateTransform.CenterX = Image_Loading.Width/2;
+            rotateTransform.CenterY = Image_Loading.Height / 2;
+            Image_Loading.RenderTransform = rotateTransform;
+
+            double duracionSegundos = 2.0;
+            double anguloInicial = 0;
+            double anguloFinal = 360;
+
+            DoubleAnimation animacionRotacion = new DoubleAnimation();
+            animacionRotacion.From = anguloInicial;
+            animacionRotacion.To = anguloFinal;
+            animacionRotacion.Duration = TimeSpan.FromSeconds(duracionSegundos);
+            animacionRotacion.RepeatBehavior = RepeatBehavior.Forever;
+
+            rotateTransform.BeginAnimation(RotateTransform.AngleProperty, animacionRotacion);
+
+            await Task.Delay(1500);
+
+            MostrarElemento(Grid_Pantalla1, Visibility.Visible);
+            MostrarElemento(Grid_PantallaLoading, Visibility.Hidden);
+        }
+
+        void MostrarElemento(Grid grid, Visibility visibility)
+        {
+            grid.Visibility = visibility;
+        }
     }
     }
+    
