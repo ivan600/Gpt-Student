@@ -25,11 +25,11 @@ namespace WpfApp1
 /// <summary>
     /// Lógica de interacción para MainWindow.xaml
 /// </summary>
-public partial class MainWindow : Window
-{
+    public partial class MainWindow : Window
+    {
         OpenAIAPI api;
-
-
+    
+    
         public MainWindow()
         {
             InitializeComponent();
@@ -37,22 +37,22 @@ public partial class MainWindow : Window
             Grid1.PreviewKeyUp += TxtMensaje_KeyDown;
             Loading();
         }
-
-string response;
-private void TxtMensaje_KeyDown(object sender, KeyEventArgs e)
-{
-if (e.Key == Key.Enter)
-{
-GenerarRespuesta();
-}
-else if (e.Key == Key.Escape) { Close(); }
-}
-
+    
+        string response;
+        private void TxtMensaje_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.Key == Key.Enter)
+            {
+                GenerarRespuesta();
+            }
+            else if (e.Key == Key.Escape) { Close(); }
+        }
+        
         Conversation chat;
-string role;
-private void GenerarRespuesta()
-{
-
+        string role;
+        private void GenerarRespuesta()
+        {
+        
             try
             {
                 if(api != null)
@@ -60,7 +60,7 @@ private void GenerarRespuesta()
                     chat.AppendUserInput(Prompt.Text);
                     AgregarPrompt(Prompt.Text);
                     AgregarRespuesta();
-
+        
                     Prompt.Text = string.Empty;
                 }else
                 {
@@ -72,13 +72,13 @@ private void GenerarRespuesta()
             
                 MessageBox.Show($"Se ha producido un error: {ex.Message}","Error");
             }
-
-}
-
-Thickness margin_TxtBlk = new Thickness(40, 5, 40, 5);
-double fontSize = 15;
-private async void AgregarRespuesta()
-{
+        
+        }
+        
+        Thickness margin_TxtBlk = new Thickness(40, 5, 40, 5);
+        double fontSize = 15;
+        private async void AgregarRespuesta()
+        {
             string respuesta = string.Empty;
             response = string.Empty;
             
@@ -93,7 +93,7 @@ private async void AgregarRespuesta()
             textBlock.Foreground = colorBrush;
             StackPanel.Children.Add(textBlock);
             textBlock.Text = "Gpt: ";
-
+        
             if(await api.Auth.ValidateAPIKey())
             {
                 await chat.StreamResponseFromChatbotAsync(res =>
@@ -109,36 +109,35 @@ private async void AgregarRespuesta()
             {
                 MessageBox.Show("La ApiKey no es valida", "Error Api");
             }
-            
-
+        
         }
-
-    private void AgregarPrompt(string _prompt)
-    {
-    TextBlock textBlock = new TextBlock();
-    textBlock.Margin = margin_TxtBlk;
-    textBlock.FontSize = fontSize;
-    textBlock.TextWrapping = TextWrapping.Wrap;
-    textBlock.Text = "Student: "+_prompt;
-    textBlock.Foreground = Brushes.White;
-    StackPanel.Children.Add(textBlock);
-    }
-
-    private void Button_Click(object sender, RoutedEventArgs e)
-    {
-    Close();
-    }
-
-    private void ColumnDefinition_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
-    {
-        DragMove();
-    }
-
-    private void Button_Click_1(object sender, RoutedEventArgs e)
-    {
-    GenerarRespuesta();
-    }
-
+    
+        private void AgregarPrompt(string _prompt)
+        {
+            TextBlock textBlock = new TextBlock();
+            textBlock.Margin = margin_TxtBlk;
+            textBlock.FontSize = fontSize;
+            textBlock.TextWrapping = TextWrapping.Wrap;
+            textBlock.Text = "Student: "+_prompt;
+            textBlock.Foreground = Brushes.White;
+            StackPanel.Children.Add(textBlock);
+        }
+    
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+        
+        private void ColumnDefinition_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            DragMove();
+        }
+    
+        private void Button_Click_1(object sender, RoutedEventArgs e)
+        {
+            GenerarRespuesta();
+        }
+    
         private void TextBox_MouseLeave(object sender, MouseEventArgs e)
         {
             if(ApiTextBox.Text != null)
@@ -147,36 +146,36 @@ private async void AgregarRespuesta()
                 chat = api.Chat.CreateConversation();
             }
         }
-
+    
         public async Task Loading()
         {
             RotateTransform rotateTransform = new RotateTransform();
             rotateTransform.CenterX = Image_Loading.Width/2;
             rotateTransform.CenterY = Image_Loading.Height / 2;
             Image_Loading.RenderTransform = rotateTransform;
-
+    
             double duracionSegundos = 2.0;
             double anguloInicial = 0;
             double anguloFinal = 360;
-
+    
             DoubleAnimation animacionRotacion = new DoubleAnimation();
             animacionRotacion.From = anguloInicial;
             animacionRotacion.To = anguloFinal;
             animacionRotacion.Duration = TimeSpan.FromSeconds(duracionSegundos);
             animacionRotacion.RepeatBehavior = RepeatBehavior.Forever;
-
+    
             rotateTransform.BeginAnimation(RotateTransform.AngleProperty, animacionRotacion);
-
+    
             await Task.Delay(1500);
-
+    
             MostrarElemento(Grid_Pantalla1, Visibility.Visible);
             MostrarElemento(Grid_PantallaLoading, Visibility.Hidden);
         }
-
+    
         void MostrarElemento(Grid grid, Visibility visibility)
         {
             grid.Visibility = visibility;
         }
     }
-    }
+}
     
