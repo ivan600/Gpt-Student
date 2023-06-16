@@ -197,5 +197,10 @@
   <ItemGroup>
     <Resource Include="Gpt-Student-Logo.ico" />
   </ItemGroup>
+  <ItemGroup>
+    <Folder Include="ApiKey\" />
+    <Folder Include="Prompts\" />
+    <Folder Include="Respuestas\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

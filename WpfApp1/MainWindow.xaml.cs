@@ -18,7 +18,8 @@ using OpenAI_API;
 using OpenAI_API.Chat;
 using OpenAI_API.Moderation;
 using System.Threading;
-
+using System.IO;
+using System.Xml.Linq;
 
 namespace WpfApp1
 {
@@ -35,6 +36,8 @@ namespace WpfApp1
             InitializeComponent();
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             Grid1.PreviewKeyUp += TxtMensaje_KeyDown;
+            PonerApiKey();
+            GenerarRespuestasAnteriores();
             Loading();
         }
     
@@ -49,7 +52,7 @@ namespace WpfApp1
         }
         
         Conversation chat;
-        string role;
+        string role = string.Empty;
         private void GenerarRespuesta()
         {
         
@@ -77,6 +80,21 @@ namespace WpfApp1
         
         Thickness margin_TxtBlk = new Thickness(40, 5, 40, 5);
         double fontSize = 15;
+
+        void AgregarTextBlock(string text, string color)
+        {
+
+            BrushConverter brushConverter = new BrushConverter();
+            Brush colorBrush = (Brush)brushConverter.ConvertFromString(color);
+            TextBlock textBlock = new TextBlock();
+            textBlock.FontSize = fontSize;
+            textBlock.TextWrapping = TextWrapping.Wrap;
+            textBlock.Margin = margin_TxtBlk;
+            textBlock.Foreground = colorBrush;
+            StackPanel.Children.Add(textBlock);
+            textBlock.Text = text;
+        }
+
         private async void AgregarRespuesta()
         {
             string respuesta = string.Empty;
@@ -96,6 +114,7 @@ namespace WpfApp1
         
             if(await api.Auth.ValidateAPIKey())
             {
+                chat.AppendSystemMessage(role);
                 await chat.StreamResponseFromChatbotAsync(res =>
                 {
                     response = res;
@@ -109,7 +128,8 @@ namespace WpfApp1
             {
                 MessageBox.Show("La ApiKey no es valida", "Error Api");
             }
-        
+
+            GuardarRespuesta(textBlock.Text, @"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\Respuestas\", "Response", @"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\Respuestas\");
         }
     
         private void AgregarPrompt(string _prompt)
@@ -121,6 +141,8 @@ namespace WpfApp1
             textBlock.Text = "Student: "+_prompt;
             textBlock.Foreground = Brushes.White;
             StackPanel.Children.Add(textBlock);
+
+            GuardarRespuesta(textBlock.Text, @"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\Prompts\", "Prompts", @"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\Prompts\");
         }
     
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -144,6 +166,7 @@ namespace WpfApp1
             {
                 api = new OpenAIAPI(ApiTextBox.Text);
                 chat = api.Chat.CreateConversation();
+                GuardarApiKey(ApiTextBox.Text);
             }
         }
     
@@ -154,7 +177,7 @@ namespace WpfApp1
             rotateTransform.CenterY = Image_Loading.Height / 2;
             Image_Loading.RenderTransform = rotateTransform;
     
-            double duracionSegundos = 2.0;
+            double duracionSegundos = 1f;
             double anguloInicial = 0;
             double anguloFinal = 360;
     
@@ -176,6 +199,68 @@ namespace WpfApp1
         {
             grid.Visibility = visibility;
         }
+
+        void GuardarRespuesta(string text, string srcSave, string name, string folderToGenerateName)
+        {
+            string nameResponse = GenerarNombre(name, folderToGenerateName);
+
+            string[] lines = { text };
+            File.WriteAllLines(srcSave + nameResponse, lines);
+            
+        }
+
+        
+        string GenerarNombre(string nameRes, string src)
+        {
+            string[] archivos = Directory.GetFiles(src);
+            int numArchivos = archivos.Length;
+            string name = nameRes + numArchivos.ToString() + ".txt";
+            return name;
+        }
+
+        int count = 0;
+        void GenerarRespuestasAnteriores()
+        {
+            string[] archivosRes = Directory.GetFiles(@"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\Respuestas\");
+            string[] archivosPrompt = Directory.GetFiles(@"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\Prompts\");
+
+            for (int i = 0; i < archivosRes.Length; i++)
+            {
+                
+                AgregarTextBlock(File.ReadAllText(archivosPrompt[i]), "#ffffff");
+                
+                
+                AgregarTextBlock(File.ReadAllText(archivosRes[i]), "#a25523");
+                if (i == archivosRes.Length - 1)
+                {
+                    role = File.ReadAllText(archivosRes[i]);
+                }
+                
+                
+            }
+            Scroll.ScrollToEnd();
+        }
+
+        void GuardarApiKey(string apiKey)
+        {
+            File.WriteAllText(@"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\ApiKey\ApiKey.txt", apiKey);
+        }
+
+        void PonerApiKey()
+        {
+            try
+            {
+                ApiTextBox.Text = File.ReadAllText(@"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\ApiKey\ApiKey.txt");
+                api = new OpenAIAPI(ApiTextBox.Text);
+                chat = api.Chat.CreateConversation();
+            }catch(Exception e)
+            {
+                MessageBox.Show(e.Message);
+            }
+            
+        }
+
+
     }
 }
     
