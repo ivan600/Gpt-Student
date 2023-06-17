@@ -324,7 +324,7 @@
                         HorizontalAlignment="Center"
                         VerticalAlignment="Bottom"
                         Foreground="Chocolate"
-                        Text="ApyKey" />
+                        Text="ApiKey" />
 
                     <TextBox
                         Name="ApiTextBox"
