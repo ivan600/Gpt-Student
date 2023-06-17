@@ -293,8 +293,8 @@ namespace WpfApp1
         {
             string nameResponse = GenerarNombre(name, folderToGenerateName);
 
-            string[] lines = { text };
-            File.WriteAllLines(srcSave + nameResponse, lines);
+            string _text = text;
+            File.WriteAllText(srcSave + nameResponse, _text);
             
         }
 
