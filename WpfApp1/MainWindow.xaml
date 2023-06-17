@@ -10,7 +10,6 @@
     Height="450"
     AllowsTransparency="True"
     Background="Transparent"
-    Icon="/Images/Gpt-Student-Logo.ico"
     ResizeMode="CanResize"
     WindowStyle="None"
     mc:Ignorable="d">
@@ -208,7 +207,7 @@
         BorderThickness="2"
         CornerRadius="10">
         <Grid Name="Grid1">
-            <Grid Name="Grid_Pantalla1" Visibility="Hidden">
+            <Grid Name="Grid_Pantalla1" Visibility="Visible">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="200" />
                     <ColumnDefinition Width="*" />
@@ -301,11 +300,11 @@
                     Click="Button_Click"
                     Style="{DynamicResource btnCloseStyle}">
                     <Image
+                        Name="img_Close"
                         Width="Auto"
                         Height="Auto"
                         HorizontalAlignment="Center"
-                        VerticalAlignment="Center"
-                        Source="C:\Users\ivan\Downloads\crossregular_106296.png" />
+                        VerticalAlignment="Center" />
                 </Button>
                 <Grid
                     Name="Pantalla1"
@@ -332,15 +331,15 @@
                         Click="Button_Click_1"
                         Style="{DynamicResource btnSendStyle}">
                         <Image
+                            Name="img_Enviar"
                             Opacity="0.5"
                             OpacityMask="Black"
-                            Source="C:\Users\ivan\Pictures\Iconos\Ui\enviar.png"
                             Stretch="Fill" />
 
                     </Button>
                 </Grid>
             </Grid>
-            <Grid Name="Grid_PantallaLoading" Visibility="Visible">
+            <Grid Name="Grid_PantallaLoading" Visibility="Hidden">
                 <StackPanel VerticalAlignment="Center">
                     <Image
                         Name="Image_Loading"
@@ -348,7 +347,7 @@
                         Height="100"
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"
-                        Source="\Images\Gpt-Student-Logo.ico" />
+                        Source="C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\bin\Debug\Images\Gpt student logo small.png" />
                     <TextBlock
                         HorizontalAlignment="Center"
                         VerticalAlignment="Center"

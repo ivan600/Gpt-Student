@@ -20,6 +20,7 @@ using OpenAI_API.Moderation;
 using System.Threading;
 using System.IO;
 using System.Xml.Linq;
+using Path = System.IO.Path;
 
 namespace WpfApp1
 {
@@ -29,16 +30,31 @@ namespace WpfApp1
     public partial class MainWindow : Window
     {
         OpenAIAPI api;
-    
-    
+
+        string promptsPathFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Prompts" + @"\");
+        string respuestasPathFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Respuestas" + @"\");
+        string imagePathFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images" + @"\");
+
+
         public MainWindow()
         {
             InitializeComponent();
+            Inicializar();
             this.MaxHeight = SystemParameters.MaximizedPrimaryScreenHeight;
             Grid1.PreviewKeyUp += TxtMensaje_KeyDown;
             PonerApiKey();
             GenerarRespuestasAnteriores();
             Task task = Loading();
+        }
+
+        void Inicializar()
+        {
+            BitmapImage bitmapEnvImage = new BitmapImage(new Uri(imagePathFolder + "enviar - copia.png"));
+            img_Enviar.Source = bitmapEnvImage;
+
+            BitmapImage bitmapClosImage = new BitmapImage(new Uri(imagePathFolder + "crossregular_106296.png"));
+            img_Close.Source = bitmapClosImage;
+
         }
     
         string response;
@@ -94,7 +110,6 @@ namespace WpfApp1
             StackPanel.Children.Add(textBlock);
             textBlock.Text = text;
             textBlock.MouseEnter += TextBlock_GotMouseCapture;
-            textBlock.MouseLeave += TextBlock_MouseLeave;
         }
 
         private async void AgregarRespuesta()
@@ -114,7 +129,6 @@ namespace WpfApp1
             StackPanel.Children.Add(textBlock);
             textBlock.Text = "Gpt: ";
             textBlock.MouseEnter += TextBlock_GotMouseCapture;
-            textBlock.MouseLeave += TextBlock_MouseLeave;
         
             if(await api.Auth.ValidateAPIKey())
             {
@@ -132,14 +146,9 @@ namespace WpfApp1
             {
                 MessageBox.Show("La ApiKey no es valida", "Error Api");
             }
-
-            GuardarRespuesta(textBlock.Text, @"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\Respuestas\", "Response", @"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\Respuestas\");
+            GuardarRespuesta(textBlock.Text, respuestasPathFolder , "Response", respuestasPathFolder);
         }
 
-        private void TextBlock_MouseLeave(object sender, MouseEventArgs e)
-        {
-            
-        }
 
         bool once = false;
         private void TextBlock_GotMouseCapture(object sender, MouseEventArgs e)
@@ -192,9 +201,10 @@ namespace WpfApp1
             textBlock.TextWrapping = TextWrapping.Wrap;
             textBlock.Text = "Student: "+_prompt;
             textBlock.Foreground = Brushes.White;
+            textBlock.MouseEnter += TextBlock_GotMouseCapture;
             StackPanel.Children.Add(textBlock);
 
-            GuardarRespuesta(textBlock.Text, @"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\Prompts\", "Prompts", @"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\Prompts\");
+            GuardarRespuesta(textBlock.Text, promptsPathFolder, "Prompts", promptsPathFolder);
         }
     
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -270,11 +280,10 @@ namespace WpfApp1
             return name;
         }
 
-        int count = 0;
         void GenerarRespuestasAnteriores()
         {
-            string[] archivosRes = Directory.GetFiles(@"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\Respuestas\");
-            string[] archivosPrompt = Directory.GetFiles(@"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\Prompts\");
+            string[] archivosRes = Directory.GetFiles(respuestasPathFolder);
+            string[] archivosPrompt = Directory.GetFiles(promptsPathFolder);
 
             for (int i = 0; i < archivosRes.Length; i++)
             {
