@@ -38,7 +38,7 @@ namespace WpfApp1
             Grid1.PreviewKeyUp += TxtMensaje_KeyDown;
             PonerApiKey();
             GenerarRespuestasAnteriores();
-            Loading();
+            Task task = Loading();
         }
     
         string response;
@@ -93,6 +93,8 @@ namespace WpfApp1
             textBlock.Foreground = colorBrush;
             StackPanel.Children.Add(textBlock);
             textBlock.Text = text;
+            textBlock.MouseEnter += TextBlock_GotMouseCapture;
+            textBlock.MouseLeave += TextBlock_MouseLeave;
         }
 
         private async void AgregarRespuesta()
@@ -111,6 +113,8 @@ namespace WpfApp1
             textBlock.Foreground = colorBrush;
             StackPanel.Children.Add(textBlock);
             textBlock.Text = "Gpt: ";
+            textBlock.MouseEnter += TextBlock_GotMouseCapture;
+            textBlock.MouseLeave += TextBlock_MouseLeave;
         
             if(await api.Auth.ValidateAPIKey())
             {
@@ -131,7 +135,55 @@ namespace WpfApp1
 
             GuardarRespuesta(textBlock.Text, @"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\Respuestas\", "Response", @"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\Respuestas\");
         }
-    
+
+        private void TextBlock_MouseLeave(object sender, MouseEventArgs e)
+        {
+            
+        }
+
+        bool once = false;
+        private void TextBlock_GotMouseCapture(object sender, MouseEventArgs e)
+        {
+            if (sender is TextBlock textBlock)
+            {
+                Clipboard.SetText(textBlock.Text);
+            }
+            if (!once)
+            {
+                CreateTextBlockCopyTo();
+                once = true;
+            }
+            
+        }
+
+        async void CreateTextBlockCopyTo()
+        {
+            TextBlock txtBlock = new TextBlock();
+            txtBlock.Text = "Se ha copiado la respuesta";
+            string colorHexadecimal = "#f7f7f7";
+            BrushConverter brushConverter = new BrushConverter();
+            Brush colorBrush = (Brush)brushConverter.ConvertFromString(colorHexadecimal);
+            txtBlock.Foreground = colorBrush;
+            txtBlock.HorizontalAlignment = HorizontalAlignment.Center;
+
+            StackPanelRadioButtons.Children.Add(txtBlock);
+
+            await DeleteObjectByTime(txtBlock, StackPanelRadioButtons, 2000);
+        }
+
+        async Task DeleteObjectByTime(Object objToDelete, Object objFrom, int time)
+        {
+            await Task.Delay(time);
+            if (objFrom is StackPanel stackPanel)
+            {
+                if (objToDelete is TextBlock textBlock)
+                {
+                    stackPanel.Children.Remove(textBlock);
+                    once = false;
+                }
+            }
+        }
+
         private void AgregarPrompt(string _prompt)
         {
             TextBlock textBlock = new TextBlock();
@@ -263,4 +315,4 @@ namespace WpfApp1
 
     }
 }
-    
+

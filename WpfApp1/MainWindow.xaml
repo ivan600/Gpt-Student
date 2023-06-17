@@ -202,7 +202,7 @@
     </Window.Resources>
 
     <Border
-        Name="PantallaChat1"
+        Name="Border_Window"
         Background="#272537"
         BorderBrush="#d2691e"
         BorderThickness="2"
@@ -228,7 +228,10 @@
                     Foreground="Chocolate">
                     Gpt Student
                 </TextBlock>
-                <StackPanel Grid.Row="1" VerticalAlignment="Top">
+                <StackPanel
+                    Name="StackPanelRadioButtons"
+                    Grid.Row="1"
+                    VerticalAlignment="Top">
                     <RadioButton
                         Height="50"
                         Content="Home"
@@ -337,7 +340,7 @@
                     </Button>
                 </Grid>
             </Grid>
-            <Grid Name="Grid_PantallaLoading">
+            <Grid Name="Grid_PantallaLoading" Visibility="Visible">
                 <StackPanel VerticalAlignment="Center">
                     <Image
                         Name="Image_Loading"
