@@ -181,25 +181,28 @@ namespace WpfApp1
         {
             TextBlock txtBlock = new TextBlock();
             txtBlock.Text = "Se ha copiado la respuesta";
-            string colorHexadecimal = "#f7f7f7";
+            string colorHexadecimal = "#c3c3c3";
             BrushConverter brushConverter = new BrushConverter();
             Brush colorBrush = (Brush)brushConverter.ConvertFromString(colorHexadecimal);
             txtBlock.Foreground = colorBrush;
             txtBlock.HorizontalAlignment = HorizontalAlignment.Center;
+            txtBlock.Margin = new Thickness(300,0,0,0);
+            txtBlock.VerticalAlignment = VerticalAlignment.Center;
 
-            StackPanelRadioButtons.Children.Add(txtBlock);
+            Grid_Pantalla1.Children.Add(txtBlock);
+            Grid.SetColumn(txtBlock, 1);
 
-            await DeleteObjectByTime(txtBlock, StackPanelRadioButtons, 2000);
+            await DeleteObjectByTime(txtBlock, Grid_Pantalla1, 2000);
         }
 
         async Task DeleteObjectByTime(Object objToDelete, Object objFrom, int time)
         {
             await Task.Delay(time);
-            if (objFrom is StackPanel stackPanel)
+            if (objFrom is Grid grid)
             {
                 if (objToDelete is TextBlock textBlock)
                 {
-                    stackPanel.Children.Remove(textBlock);
+                    grid.Children.Remove(textBlock);
                     once = false;
                 }
             }
@@ -207,18 +210,21 @@ namespace WpfApp1
 
         private void AgregarPrompt(string _prompt)
         {
+            string colorHexadecimal = "#c3c3c3";
+            BrushConverter brushConverter = new BrushConverter();
+            Brush colorBrush = (Brush)brushConverter.ConvertFromString(colorHexadecimal);
+
             TextBlock textBlock = new TextBlock();
             textBlock.Margin = margin_TxtBlk;
             textBlock.FontSize = fontSize;
             textBlock.TextWrapping = TextWrapping.Wrap;
             textBlock.Text = "Student: "+_prompt;
-            textBlock.Foreground = Brushes.White;
+            textBlock.Foreground = colorBrush;
             textBlock.MouseEnter += TextBlock_GotMouseCapture;
             StackPanel.Children.Add(textBlock);
 
             if(!Directory.Exists(BasePathFolder + "Prompts" + @"\"))
             {
-                MessageBox.Show("Directorio Prompts no existe, se creara uno");
                 Directory.CreateDirectory(BasePathFolder + "Prompts" + @"\");
                 GuardarRespuesta(textBlock.Text, promptsPathFolder, "Prompts", promptsPathFolder);
             }
@@ -310,17 +316,12 @@ namespace WpfApp1
 
                 for (int i = 0; i < archivosRes.Length; i++)
                 {
-
-                    AgregarTextBlock(File.ReadAllText(archivosPrompt[i]), "#ffffff");
-
-
+                    AgregarTextBlock(File.ReadAllText(archivosPrompt[i]), "#c3c3c3");
                     AgregarTextBlock(File.ReadAllText(archivosRes[i]), "#a25523");
                     if (i == archivosRes.Length - 1)
                     {
                         role = File.ReadAllText(archivosRes[i]);
                     }
-
-
                 }
                 Scroll.ScrollToEnd();
             }
@@ -346,7 +347,20 @@ namespace WpfApp1
             
         }
 
+        void ClearAllResponses()
+        {
+            StackPanel.Children.Clear();
+        }
 
+        private void Button_Click_2(object sender, RoutedEventArgs e)
+        {
+            ClearAllResponses();
+            if (Directory.Exists(BasePathFolder + "Prompts" + @"\")&& Directory.Exists(BasePathFolder + "Respuestas" + @"\"))
+            {
+                Directory.Delete(BasePathFolder + "Prompts" + @"\", true);
+                Directory.Delete(BasePathFolder + "Respuestas" + @"\", true);
+            }
+        }
     }
 }
 
