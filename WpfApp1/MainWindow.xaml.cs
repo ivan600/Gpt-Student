@@ -34,6 +34,8 @@ namespace WpfApp1
         string promptsPathFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Prompts" + @"\");
         string respuestasPathFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Respuestas" + @"\");
         string imagePathFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images" + @"\");
+        string BasePathFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
+
 
 
         public MainWindow()
@@ -146,7 +148,17 @@ namespace WpfApp1
             {
                 MessageBox.Show("La ApiKey no es valida", "Error Api");
             }
-            GuardarRespuesta(textBlock.Text, respuestasPathFolder , "Response", respuestasPathFolder);
+
+            if (!Directory.Exists(BasePathFolder + "Respuestas" + @"\"))
+            {
+                Directory.CreateDirectory(BasePathFolder + "Respuestas" + @"\");
+                GuardarRespuesta(textBlock.Text, respuestasPathFolder, "Response", respuestasPathFolder);
+            }
+            else
+            {
+                GuardarRespuesta(textBlock.Text, respuestasPathFolder, "Response", respuestasPathFolder);
+            }
+
         }
 
 
@@ -204,7 +216,16 @@ namespace WpfApp1
             textBlock.MouseEnter += TextBlock_GotMouseCapture;
             StackPanel.Children.Add(textBlock);
 
-            GuardarRespuesta(textBlock.Text, promptsPathFolder, "Prompts", promptsPathFolder);
+            if(!Directory.Exists(BasePathFolder + "Prompts" + @"\"))
+            {
+                MessageBox.Show("Directorio Prompts no existe, se creara uno");
+                Directory.CreateDirectory(BasePathFolder + "Prompts" + @"\");
+                GuardarRespuesta(textBlock.Text, promptsPathFolder, "Prompts", promptsPathFolder);
+            }
+            else
+            {
+                GuardarRespuesta(textBlock.Text, promptsPathFolder, "Prompts", promptsPathFolder);
+            }
         }
     
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -282,24 +303,28 @@ namespace WpfApp1
 
         void GenerarRespuestasAnteriores()
         {
-            string[] archivosRes = Directory.GetFiles(respuestasPathFolder);
-            string[] archivosPrompt = Directory.GetFiles(promptsPathFolder);
-
-            for (int i = 0; i < archivosRes.Length; i++)
+            if(Directory.Exists(BasePathFolder + "Respuestas" + @"\") && Directory.Exists(BasePathFolder + "Prompts" + @"\"))
             {
-                
-                AgregarTextBlock(File.ReadAllText(archivosPrompt[i]), "#ffffff");
-                
-                
-                AgregarTextBlock(File.ReadAllText(archivosRes[i]), "#a25523");
-                if (i == archivosRes.Length - 1)
+                string[] archivosRes = Directory.GetFiles(respuestasPathFolder);
+                string[] archivosPrompt = Directory.GetFiles(promptsPathFolder);
+
+                for (int i = 0; i < archivosRes.Length; i++)
                 {
-                    role = File.ReadAllText(archivosRes[i]);
+
+                    AgregarTextBlock(File.ReadAllText(archivosPrompt[i]), "#ffffff");
+
+
+                    AgregarTextBlock(File.ReadAllText(archivosRes[i]), "#a25523");
+                    if (i == archivosRes.Length - 1)
+                    {
+                        role = File.ReadAllText(archivosRes[i]);
+                    }
+
+
                 }
-                
-                
+                Scroll.ScrollToEnd();
             }
-            Scroll.ScrollToEnd();
+            
         }
 
         void GuardarApiKey(string apiKey)
