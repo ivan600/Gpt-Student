@@ -12,7 +12,11 @@
 
 
 
-https://github.com/ivan600/Gpt-Student/assets/57300867/964fc0d8-a12b-41bc-92c3-82c571d9a274
+
+
+
+https://github.com/ivan600/Gpt-Student/assets/57300867/230b7e3f-ced9-4c80-a728-0195ef8fe2c3
+
 
 
 
