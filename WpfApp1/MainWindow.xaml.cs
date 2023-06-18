@@ -78,10 +78,13 @@ namespace WpfApp1
             {
                 if(api != null)
                 {
-                    chat.AppendUserInput(Prompt.Text);
-                    AgregarPrompt(Prompt.Text);
-                    AgregarRespuesta();
-        
+                    if(Prompt.Text != string.Empty)
+                    {
+                        chat.AppendUserInput(Prompt.Text);
+                        AgregarPrompt(Prompt.Text);
+                        AgregarRespuesta();
+                    }
+                    
                     Prompt.Text = string.Empty;
                 }else
                 {
@@ -185,9 +188,10 @@ namespace WpfApp1
             BrushConverter brushConverter = new BrushConverter();
             Brush colorBrush = (Brush)brushConverter.ConvertFromString(colorHexadecimal);
             txtBlock.Foreground = colorBrush;
-            txtBlock.HorizontalAlignment = HorizontalAlignment.Center;
-            txtBlock.Margin = new Thickness(300,0,0,0);
+            txtBlock.HorizontalAlignment = HorizontalAlignment.Right;
+            txtBlock.Margin = new Thickness(0,0,60,0);
             txtBlock.VerticalAlignment = VerticalAlignment.Center;
+
 
             Grid_Pantalla1.Children.Add(txtBlock);
             Grid.SetColumn(txtBlock, 1);
@@ -330,16 +334,29 @@ namespace WpfApp1
 
         void GuardarApiKey(string apiKey)
         {
-            File.WriteAllText(@"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\ApiKey\ApiKey.txt", apiKey);
+            if(Directory.Exists(BasePathFolder + @"ApiKey\"))
+            {
+                File.WriteAllText(BasePathFolder + @"ApiKey\" + "ApiKey.txt", apiKey);
+            }
+            else
+            {
+                Directory.CreateDirectory(BasePathFolder + @"ApiKey\");
+                File.WriteAllText(BasePathFolder + @"ApiKey\" + "ApiKey.txt", apiKey);
+            }
+            
         }
 
         void PonerApiKey()
         {
             try
             {
-                ApiTextBox.Text = File.ReadAllText(@"C:\Users\ivan\Documents\CursosUdemy\C#\WpfApp1\WpfApp1\ApiKey\ApiKey.txt");
-                api = new OpenAIAPI(ApiTextBox.Text);
-                chat = api.Chat.CreateConversation();
+                if(Directory.Exists(BasePathFolder + @"ApiKey\"))
+                {
+                    ApiTextBox.Text = File.ReadAllText(BasePathFolder + @"ApiKey\" + "ApiKey.txt");
+                    api = new OpenAIAPI(ApiTextBox.Text);
+                    chat = api.Chat.CreateConversation();
+                }
+                
             }catch(Exception e)
             {
                 MessageBox.Show(e.Message);

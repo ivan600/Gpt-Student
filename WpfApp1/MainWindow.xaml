@@ -406,6 +406,11 @@
             </Grid>
             <Grid Name="Grid_PantallaLoading" Visibility="Visible">
                 <StackPanel VerticalAlignment="Center">
+                    <TextBlock Text="Gpt Student"
+                               HorizontalAlignment="Center"
+                               FontSize="50"
+                               Foreground="#df650d"
+                               FontWeight="Bold"/>
                     <Image
                         Name="Image_Loading"
                         Width="100"
