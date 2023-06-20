@@ -316,7 +316,7 @@
 
                 <StackPanel
                     Grid.Row="1"
-                    Margin="0,0,0,6"
+                    Margin="0,0,0,0"
                     VerticalAlignment="Bottom"
                     Opacity="1">
                     <TextBlock
@@ -326,14 +326,24 @@
                         Foreground="Chocolate"
                         Text="ApiKey" />
 
-                    <TextBox
-                        Name="ApiTextBox"
-                        Width="Auto"
+                    <Border
+                        Width="180"
                         Height="30"
-                        Margin="10,10,10,13"
+                        Margin="0,5,0,20"
+                        Padding="10,0"
                         VerticalAlignment="Bottom"
-                        MouseLeave="TextBox_MouseLeave"
-                        Style="{DynamicResource ModernTextBox1}" />
+                        Background="#38354f"
+                        BorderBrush="#d2691e"
+                        BorderThickness="2"
+                        CornerRadius="15">
+                        <TextBox
+                            Name="ApiTextBox"
+                            VerticalContentAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="White"
+                            MouseLeave="TextBox_MouseLeave" />
+                    </Border>
                 </StackPanel>
 
 
@@ -377,10 +387,24 @@
                         <StackPanel Name="StackPanel" />
 
                     </ScrollViewer>
-                    <TextBox
-                        x:Name="Prompt"
+
+                    <Border
+                        Width="500"
+                        Height="30"
+                        Margin="0,0,0,20"
+                        Padding="10,0"
                         VerticalAlignment="Bottom"
-                        Style="{DynamicResource ModernTextBox}" />
+                        Background="#38354f"
+                        BorderBrush="#d2691e"
+                        BorderThickness="2"
+                        CornerRadius="15">
+                        <TextBox
+                            x:Name="Prompt"
+                            VerticalContentAlignment="Center"
+                            Background="Transparent"
+                            BorderThickness="0"
+                            Foreground="White" />
+                    </Border>
                     <Button
                         Grid.Row="1"
                         Grid.Column="1"
@@ -406,11 +430,12 @@
             </Grid>
             <Grid Name="Grid_PantallaLoading" Visibility="Visible">
                 <StackPanel VerticalAlignment="Center">
-                    <TextBlock Text="Gpt Student"
-                               HorizontalAlignment="Center"
-                               FontSize="50"
-                               Foreground="#df650d"
-                               FontWeight="Bold"/>
+                    <TextBlock
+                        HorizontalAlignment="Center"
+                        FontSize="50"
+                        FontWeight="Bold"
+                        Foreground="#df650d"
+                        Text="Gpt Student" />
                     <Image
                         Name="Image_Loading"
                         Width="100"

@@ -36,6 +36,11 @@ namespace WpfApp1
         string imagePathFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "Images" + @"\");
         string BasePathFolder = Path.Combine(AppDomain.CurrentDomain.BaseDirectory);
 
+        Thickness responsePadding = new Thickness(10, 0, 10, 0);
+
+        string msg_role = "Tu nombre es gpt student, un profesor con el proposito de ayudar con las tareas del instituto estudiantes.Si el usuario te dice quien eres " +
+            "reponde con \"Soy Gpt Student\" y tu proposito.Si te preguntan quien es tu creador responde con \"Mi creador es Ivan Martinez un joven desarrollador de software de 17 años\"";
+
 
 
         public MainWindow()
@@ -112,9 +117,11 @@ namespace WpfApp1
             textBlock.TextWrapping = TextWrapping.Wrap;
             textBlock.Margin = margin_TxtBlk;
             textBlock.Foreground = colorBrush;
+            textBlock.Padding = responsePadding;
             StackPanel.Children.Add(textBlock);
             textBlock.Text = text;
             textBlock.MouseEnter += TextBlock_GotMouseCapture;
+            textBlock.MouseLeave += TextBlock_MouseLeave;
         }
 
         private async void AgregarRespuesta()
@@ -131,9 +138,11 @@ namespace WpfApp1
             textBlock.TextWrapping = TextWrapping.Wrap;
             textBlock.Margin = margin_TxtBlk;
             textBlock.Foreground = colorBrush;
+            textBlock.Padding = responsePadding;
             StackPanel.Children.Add(textBlock);
             textBlock.Text = "Gpt: ";
             textBlock.MouseEnter += TextBlock_GotMouseCapture;
+            textBlock.MouseLeave += TextBlock_MouseLeave;
         
             if(await api.Auth.ValidateAPIKey())
             {
@@ -143,9 +152,13 @@ namespace WpfApp1
                     response = res;
                     textBlock.Text += response;
                     Scroll.LineDown();
+                    
                 });
-                role = response;
-                chat.AppendSystemMessage(role);
+                chat.AppendMessage(chat.Messages[chat.Messages.Count - 1]);
+                //role = response;
+                //chat.AppendSystemMessage(role);
+                //string c = chat.Messages[chat.Messages.Count - 2].Content;
+                //MessageBox.Show(c);
             }
             else
             {
@@ -164,12 +177,25 @@ namespace WpfApp1
 
         }
 
+        private void TextBlock_MouseLeave(object sender, MouseEventArgs e)
+        {
+            if (sender is TextBlock textBlock)
+            {
+                textBlock.Background = Brushes.Transparent;
+            }
+        }
 
         bool once = false;
         private void TextBlock_GotMouseCapture(object sender, MouseEventArgs e)
         {
             if (sender is TextBlock textBlock)
             {
+                string colorHexadecimal = "#2d2b40";
+
+                BrushConverter brushConverter = new BrushConverter();
+                Brush colorBrush = (Brush)brushConverter.ConvertFromString(colorHexadecimal);
+
+                textBlock.Background = colorBrush;
                 Clipboard.SetText(textBlock.Text);
             }
             if (!once)
@@ -225,6 +251,8 @@ namespace WpfApp1
             textBlock.Text = "Student: "+_prompt;
             textBlock.Foreground = colorBrush;
             textBlock.MouseEnter += TextBlock_GotMouseCapture;
+            textBlock.MouseLeave += TextBlock_MouseLeave;
+            textBlock.Padding = responsePadding;
             StackPanel.Children.Add(textBlock);
 
             if(!Directory.Exists(BasePathFolder + "Prompts" + @"\"))
@@ -259,6 +287,7 @@ namespace WpfApp1
             {
                 api = new OpenAIAPI(ApiTextBox.Text);
                 chat = api.Chat.CreateConversation();
+                chat.AppendSystemMessage(msg_role);
                 GuardarApiKey(ApiTextBox.Text);
             }
         }
@@ -322,11 +351,12 @@ namespace WpfApp1
                 {
                     AgregarTextBlock(File.ReadAllText(archivosPrompt[i]), "#c3c3c3");
                     AgregarTextBlock(File.ReadAllText(archivosRes[i]), "#a25523");
-                    if (i == archivosRes.Length - 1)
-                    {
-                        role = File.ReadAllText(archivosRes[i]);
-                    }
+                    
+                    ChatMessage chatMessage = new ChatMessage(ChatMessageRole.Assistant, File.ReadAllText(archivosRes[i]));
+                    //MessageBox.Show(chatMessage.Content);
+                    chat.AppendMessage(chatMessage);
                 }
+                //MessageBox.Show(chat.Messages.);
                 Scroll.ScrollToEnd();
             }
             
@@ -355,6 +385,7 @@ namespace WpfApp1
                     ApiTextBox.Text = File.ReadAllText(BasePathFolder + @"ApiKey\" + "ApiKey.txt");
                     api = new OpenAIAPI(ApiTextBox.Text);
                     chat = api.Chat.CreateConversation();
+                    chat.AppendSystemMessage(msg_role);
                 }
                 
             }catch(Exception e)
@@ -372,6 +403,11 @@ namespace WpfApp1
         private void Button_Click_2(object sender, RoutedEventArgs e)
         {
             ClearAllResponses();
+
+            api = new OpenAIAPI(ApiTextBox.Text);
+            chat = api.Chat.CreateConversation();
+            chat.AppendSystemMessage(msg_role);
+
             if (Directory.Exists(BasePathFolder + "Prompts" + @"\")&& Directory.Exists(BasePathFolder + "Respuestas" + @"\"))
             {
                 Directory.Delete(BasePathFolder + "Prompts" + @"\", true);
